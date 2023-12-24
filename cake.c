@@ -101,6 +101,7 @@ int main(int argc, char avgv[])
             }
             else if(menu==2)
             {
+                printf("구입하신 제품은 %s, %d개 입니다.");
                 printf("결재하실 금액은 총 %d원 입니다.",price);
                 break;
             }

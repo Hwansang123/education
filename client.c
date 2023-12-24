@@ -8,19 +8,20 @@
 #define BUF_SIZE 1024
 void error_handling(char *message);
 
-int main(int argv, char *argv[])
+int main(int argc, char *argv[])
 {
     int sock;
     char message[BUF_SIZE];
     int str_len, recv_len, recv_cnt;
     struct sockaddr_in serv_adr;
+    FILE * file;
 
     if(argc!=3){
         printf("Usage : %s <IP> <port>\n", argv[0]);
         exit(1);
     }
 
-    sock=socket(PF_INET, SOCK_STREAM, 0;);
+    sock=socket(PF_INET, SOCK_STREAM, 0);
     if(sock==-1)
         error_handling("socket() error");
 
@@ -36,16 +37,16 @@ int main(int argv, char *argv[])
 
     while(1)
     {
-        fgets(message, BUF_SIZE, file)
+        fgets(message, BUF_SIZE, file);
         if(feof(file)) break;
         str_len=write(sock, message, strlen(message));
-        recv_len=0
+        recv_len=0;
         while(recv_len<str_len)
         {
             recv_cnt=read(sock, &message[recv_len], BUF_SIZE-1);
             if(recv_cnt==-1)
                 error_handling("read() error");
-            recv_len+=recv_cnt
+            recv_len+=recv_cnt;
         }
         message[recv_len]=0;
     }
@@ -54,7 +55,7 @@ int main(int argv, char *argv[])
 }
 void error_handling(char *message)
 {
-    fputs(meesag, stderr);
+    fputs(message, stderr);
     fputs('\n', stderr);
     exit(1);
 }
