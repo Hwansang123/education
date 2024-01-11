@@ -3,7 +3,12 @@
 #include <string>
 #include <stdlib.h>
 #include <unistd.h>
+#include <cstring>
 using namespace std;
+#define MVIP  95000
+#define VIP  38000
+#define GOLD  15200
+#define SILVER  9500
 
 struct Player
 {
@@ -50,8 +55,7 @@ struct Coach
     char Birth[20];
     char Position[20];
 };
-Coach coa[7]=
-    {
+Coach coa[7]={
         {"위르겐 클린스만, ", "JURGEN Klinsmann, ", "1964.07.30, ", "감독"},
         {"안드레아스 헤어초크, ", "ANDREAS Herzog, ", "1968.09.10, ", "수석 코치"},
         {"차두리, ", "CHA Duri, ", "1980.07.25, ", "코치"},
@@ -60,13 +64,6 @@ Coach coa[7]=
         {"베르너 로이타드, ", "WERNER Leuthard, ", "1992.01.24, ", "피지컬 코치"},
         {"이재홍, ", "LEE Jaehong, ", "1983.03.23, ", "피지컬 코치"}
     };
-// struct Country
-// {
-//     char A[20];
-//     char B[20];
-//     char C[20];
-//     char D[20];
-// };
 struct Member
 {
     string ID,PW,E_mail,Phone;
@@ -79,19 +76,29 @@ struct Member
     int UID;
     int special[30]={'!','@','#','$','%','^','&','*','(',')','-','+','=','~','`','[',']',',','.','/','<','>','?',';',':','"','{','}','|','_'};//특수문자구분을 위해 배열로 구현
     int n_special=0;//특수문자 사용을 특정하기 위한 변수
+    int choice;//입력값을 받기 위한 임시 변수
 };
-/*User_Id*/
-// struct Chair
-// {
-//     char Area[20];
-//     char Seat[20];
-//     // char 
-// };
+struct Payments
+{
+    int metch_number=0;
+    int area_number=0;
+    int seat_number=0;
+    char yes=0;
+    string metch;
+    string area;
+    string seat;
+};
+struct check
+{
+    string id;
+    string ticket;
+};
 int login=0;//로그인이 되었는지 확인하는 변수
 int main(void)
 {
+    string log_id;
     ifstream readFile;
-    readFile.open("door.csv");
+    readFile.open("door.txt");
     if(readFile.is_open())                      //파일열림 확인. !을써서 안열릴때 경고문을 적을수도 있다.
     {
         while(!readFile.eof())                  //eof가 아닐때 까지 와일문 돈다
@@ -125,12 +132,14 @@ int main(void)
         {
             cout<<"     4. 경기 예매"<<endl;
             cout<<"     5. 예매 정보 확인"<<endl;
+            cout<<"     6. 로그아웃"<<endl;
         }
         cout<<"     0. 종료"<<endl;
         cout<<"\n"<<endl;
         cout<<"원하는 메뉴의 버튼을 입력해 주세요 :";
-        // cout<<login<<endl;           //로그인이 안되면 0 되면 1표시
-        
+        cout<<'\n';
+        cout<<"login: "<<login<<endl;           //로그인이 안되면 0 되면 1표시
+        cout<<"log_id: "<<log_id<<endl;         //로그인되어 있는 ID
         cin>>choice_number;
         cin.get();
         
@@ -203,6 +212,7 @@ int main(void)
                         case '1' :
                             {
                                 system("clear");
+                                cout<<"A조 "<<endl;
                                 cout<<"1. 카타르 VS 레바논 2024.01.13 토요일 오전 01:00"<<endl;
                                 cout<<"2. 중국 VS 타지키스탄 2024.01.13 토요일 오후 23:30"<<endl;
                                 cout<<"3. 레바논 VS 중국 2024.01.17 수요일 오후 20:30"<<endl;
@@ -220,6 +230,7 @@ int main(void)
                         case '2':
                             {
                                 system("clear");
+                                cout<<"B조 "<<endl;
                                 cout<<"1. 호주 VS 인도 2024.01.13 토요일 오후 20:30"<<endl;
                                 cout<<"2. 우즈벡키스탄 VS 시리아 2024.01.14 일요일 오전 02:30"<<endl;
                                 cout<<"3. 시리아 VS 호주 2024.01.18 목요일 오후 20:30"<<endl;
@@ -237,6 +248,7 @@ int main(void)
                         case '3':
                             {
                                 system("clear");
+                                cout<<"C조 "<<endl;
                                 cout<<"1. 아랍에미리트 VS 홍콩 2024.01.14 일요일 오후 23:30"<<endl;
                                 cout<<"2. 이란 VS 팔레스트아니 2024.01.15 월요일 오전 02:30"<<endl;
                                 cout<<"3. 팔레스트아니 VS 아랍에미리트 2024.01.19 금요일 오전 02:30"<<endl;
@@ -254,6 +266,7 @@ int main(void)
                         case '4':
                             {
                                 system("clear");
+                                cout<<"D조 "<<endl;
                                 cout<<"1. 일본 VS 베트남 2024.01.14 일요일 오후 20:30"<<endl;
                                 cout<<"2. 인도네시아 VS 이라크 2024.01.15 월요일 오후 23:30"<<endl;
                                 cout<<"3. 이라크 VS 일본 2024.01.19 금요일 오후 20:30"<<endl;
@@ -271,6 +284,7 @@ int main(void)
                         case '5':
                             {
                                 system("clear");
+                                cout<<"E조 "<<endl;
                                 cout<<"1. 대한민국 VS 바레인 2024.01.15 월요일 오후 20:30"<<endl;
                                 cout<<"2. 말레이시아 VS 요르단 2024.01.16 화요일 오전 02:30"<<endl;
                                 cout<<"3. 요르단 VS 대한민국 2024.01.20 토요일 오후 20:30"<<endl;
@@ -288,6 +302,7 @@ int main(void)
                         case '6':
                             {
                                 system("clear");
+                                cout<<"F조 "<<endl;
                                 cout<<"1. 태국 VS 키르기스스탄 2024.01.16 화요일 오후 23:30"<<endl;
                                 cout<<"2. 사우디아라비아 VS 오만 2024.01.17 수요일 오전 02:30"<<endl;
                                 cout<<"3. 오만 VS 태국 2024.01.21 일요일 오후 23:30"<<endl;
@@ -316,47 +331,1794 @@ int main(void)
                     }
                 }
             }
-        case 8://로그인 파트
+        case 4://경기예매 파트
             {
-                Member log;
-                cout<<"로그인을 선택하셨습니다."<<endl;
-                cout<<"사용자 : ";
-                getline(cin, log.ID);
-                ifstream file;               //파일 오픈을 위한 변수 선언
-                file.open("/home/aiot6/CProjects/edu/24/01/project/account.csv");    //파일 오픈
-                if(!file.is_open())          //파일이 없으면
+                Payments pay;
+                // log_id=;
+                int a;
+                cout<<"경기 예매하기를 선택하셨습니다."<<endl;
+                sleep(1);
+                system("clear");
+                cout<<"현재 E조 경기들만 예매가 가능합니다."<<endl;
+                sleep(1);
+                while(1)
                 {
-                    cout<<"파일이 없음 ㅜㅡ";
+                    cout<<"E조 "<<endl;
+                    cout<<"1. 대한민국 VS 바레인 2024.01.15 월요일 오후 20:30"<<endl;
+                    usleep(500000);
+                    cout<<"2. 말레이시아 VS 요르단 2024.01.16 화요일 오전 02:30"<<endl;
+                    usleep(500000);
+                    cout<<"3. 요르단 VS 대한민국 2024.01.20 토요일 오후 20:30"<<endl;
+                    usleep(500000);
+                    cout<<"4. 바레인 VS 말레이시아 2024.01.20 토요일 오후 23:30"<<endl;
+                    usleep(500000);
+                    cout<<"5. 대한민국 VS 말레이시아 2024.01.25 목요일 오후 20:30"<<endl;
+                    usleep(500000);
+                    cout<<"6. 요르단 VS 바레인 2024.01.25 목요일 오후 20:30"<<endl;
+                    usleep(500000);
+                    cout<<'\n';
+                    cout<<"원하는 경기를 선택해 주세요."<<endl;
+                    cin>>pay.metch_number;
+                    cin.get();
+                    switch (pay.metch_number)
+                    {
+                        case 1:
+                            {
+                                system("clear");
+                                cout<<"'대한민국 VS 바레인'"<<endl;
+                                cout<<"'2024.01.15 월요일 오후 20:30'"<<endl;
+                                cout<<"선택한 경기가 맞습니까?"<<endl;
+                                cout<<" Y / N "<<endl;
+                                cin>>pay.yes;
+                                if(pay.yes=='y'||pay.yes=='Y')
+                                {
+                                    system("clear");
+                                    cout<<"예매를 선택하셨습니다."<<endl;
+                                    pay.metch="대한민국 VS 바레인 2024.01.15 월요일 오후 20:30";
+                                    cout<<"원하는 구역을 선택해 주세요."<<endl;
+                                    cout<<"MVIP\t VIP\t GOLD\t SILVER"<<endl;
+                                    cin>>pay.area_number;
+                                    switch (pay.area_number)
+                                    {
+                                    case 1:
+                                        {
+                                            system("clear");
+                                            cout<<"MVIP석을 선택하셨습니다."<<endl;
+                                            pay.area= "MVIP";
+                                            cout<<"MVIP 석은 최대 4인까지 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"MVIP석은 현재 2개의 좌석이 남아있습니다."<<endl;
+                                                cout<<"\n";
+                                                cout<<"1. M-1번\t2. M-2번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>2)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="M-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="M-2번 좌석";
+                                                }
+                                                system("clear");
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"MVIP석의 금액은 "<<MVIP<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 2:
+                                        {
+                                            system("clear");
+                                            cout<<"VIP 석을 선택하셨습니다."<<endl;
+                                            pay.area= "VIP";
+                                            cout<<"VIP 석은 최대 2인까지 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"VIP석은 현재 4개의 좌석이 남아있습니다."<<endl;
+                                                cout<<'\n';
+                                                cout<<"1. S-1번\t2. S-2번"<<endl;
+                                                cout<<"3. S-3번\t4. S-4번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>4)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="S-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="S-2번 좌석";
+                                                }
+                                                else if(pay.seat_number=3)
+                                                {
+                                                    pay.seat="S-3번 좌석";
+                                                }
+                                                else if(pay.seat_number=4)
+                                                {
+                                                    pay.seat="S-4번 좌석";
+                                                }
+                                                system("clear");      
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"VIP석의 금액은 "<<VIP<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 3:
+                                        {
+                                            system("clear");
+                                            cout<<"GOLD석을 선택하셨습니다."<<endl;
+                                            pay.area= "GOLD";
+                                            cout<<"GOLD석은 최대 1인 만 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"GOLD석은 현재 6개의 좌석이 남아있습니다."<<endl;
+                                                cout<<'\n';
+                                                cout<<"1. A-1번\t2. A-2번\t3. A-3번"<<endl;
+                                                cout<<"4. A-4번\t5. A-5번\t6. A-6번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>6)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="A-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="A-2번 좌석";
+                                                }
+                                                else if(pay.seat_number=3)
+                                                {
+                                                    pay.seat="A-3번 좌석";
+                                                }
+                                                else if(pay.seat_number=4)
+                                                {
+                                                    pay.seat="A-4번 좌석";
+                                                }
+                                                else if(pay.seat_number=5)
+                                                {
+                                                    pay.seat="A-5번 좌석";
+                                                }
+                                                else if(pay.seat_number=6)
+                                                {
+                                                    pay.seat="A-6번 좌석";
+                                                }
+                                                system("clear");        
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"GOLD석의 금액은 "<<GOLD<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 4:
+                                        {
+                                            system("clear");
+                                            cout<<"SILVER 석을 선택하셨습니다."<<endl;
+                                            pay.area= "SILVER";
+                                            cout<<"SILVER 석은 최대 1인 만 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"SILVER석은 현재 8개의 좌석이 남아있습니다."<<endl;
+                                                cout<<'\n';
+                                                cout<<"1. B-1번\t2. B-2번\t3. B-3번\t4. B-4번"<<endl;
+                                                cout<<"5. B-5번\t6. B-6번\t6. B-7번\t6. B-8번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>8)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }           
+                                                system("clear");
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="B-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="B-2번 좌석";
+                                                }
+                                                else if(pay.seat_number=3)
+                                                {
+                                                    pay.seat="B-3번 좌석";
+                                                }
+                                                else if(pay.seat_number=4)
+                                                {
+                                                    pay.seat="B-4번 좌석";
+                                                }
+                                                else if(pay.seat_number=5)
+                                                {
+                                                    pay.seat="B-5번 좌석";
+                                                }
+                                                else if(pay.seat_number=6)
+                                                {
+                                                    pay.seat="B-6번 좌석";
+                                                }
+                                                else if(pay.seat_number=7)
+                                                {
+                                                    pay.seat="B-7번 좌석";
+                                                }
+                                                else if(pay.seat_number=8)
+                                                {
+                                                    pay.seat="B-8번 좌석";
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"SILVER석의 금액은 "<<SILVER<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                    }
+                                }
+                                else if (pay.yes=='n'||pay.yes=='N')
+                                {
+                                    break;
+                                }
+                                break;
+                            }
+                            break;
+                        case 2:
+                            {
+                                system("clear");
+                                cout<<"'말레이시아 VS 요르단'"<<endl;
+                                cout<<"'2024.01.16 화요일 오전 02:30'"<<endl;
+                                cout<<"선택한 경기가 맞습니까?"<<endl;
+                                cout<<" Y / N "<<endl;
+                                cin>>pay.yes;
+                                if(pay.yes=='y'||pay.yes=='Y')
+                                {
+                                    system("clear");
+                                    cout<<"예매를 선택하셨습니다."<<endl;
+                                    pay.metch="말레이시아 VS 요르단 2024.01.16 화요일 오전 02:30";
+                                    cout<<"원하는 구역을 선택해 주세요."<<endl;
+                                    cout<<"MVIP\t VIP\t GOLD\t SILVER"<<endl;
+                                    cin>>pay.area_number;
+                                    switch (pay.area_number)
+                                    {
+                                    case 1:
+                                        {
+                                            system("clear");
+                                            cout<<"MVIP석을 선택하셨습니다."<<endl;
+                                            pay.area= "MVIP";
+                                            cout<<"MVIP 석은 최대 4인까지 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"MVIP석은 현재 2개의 좌석이 남아있습니다."<<endl;
+                                                cout<<"\n";
+                                                cout<<"1. M-1번\t2. M-2번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>2)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="M-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="M-2번 좌석";
+                                                }
+                                                system("clear");
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"MVIP석의 금액은 "<<MVIP<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 2:
+                                        {
+                                            system("clear");
+                                            cout<<"VIP 석을 선택하셨습니다."<<endl;
+                                            pay.area= "VIP";
+                                            cout<<"VIP 석은 최대 2인까지 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"VIP석은 현재 4개의 좌석이 남아있습니다."<<endl;
+                                                cout<<'\n';
+                                                cout<<"1. S-1번\t2. S-2번"<<endl;
+                                                cout<<"3. S-3번\t4. S-4번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>4)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="S-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="S-2번 좌석";
+                                                }
+                                                else if(pay.seat_number=3)
+                                                {
+                                                    pay.seat="S-3번 좌석";
+                                                }
+                                                else if(pay.seat_number=4)
+                                                {
+                                                    pay.seat="S-4번 좌석";
+                                                }
+                                                system("clear");      
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"VIP석의 금액은 "<<VIP<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 3:
+                                        {
+                                            system("clear");
+                                            cout<<"GOLD석을 선택하셨습니다."<<endl;
+                                            pay.area= "GOLD";
+                                            cout<<"GOLD석은 최대 1인 만 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"GOLD석은 현재 6개의 좌석이 남아있습니다."<<endl;
+                                                cout<<'\n';
+                                                cout<<"1. A-1번\t2. A-2번\t3. A-3번"<<endl;
+                                                cout<<"4. A-4번\t5. A-5번\t6. A-6번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>6)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="A-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="A-2번 좌석";
+                                                }
+                                                else if(pay.seat_number=3)
+                                                {
+                                                    pay.seat="A-3번 좌석";
+                                                }
+                                                else if(pay.seat_number=4)
+                                                {
+                                                    pay.seat="A-4번 좌석";
+                                                }
+                                                else if(pay.seat_number=5)
+                                                {
+                                                    pay.seat="A-5번 좌석";
+                                                }
+                                                else if(pay.seat_number=6)
+                                                {
+                                                    pay.seat="A-6번 좌석";
+                                                }
+                                                system("clear");        
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"GOLD석의 금액은 "<<GOLD<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 4:
+                                        {
+                                            system("clear");
+                                            cout<<"SILVER 석을 선택하셨습니다."<<endl;
+                                            pay.area= "SILVER";
+                                            cout<<"SILVER 석은 최대 1인 만 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"SILVER석은 현재 8개의 좌석이 남아있습니다."<<endl;
+                                                cout<<'\n';
+                                                cout<<"1. B-1번\t2. B-2번\t3. B-3번\t4. B-4번"<<endl;
+                                                cout<<"5. B-5번\t6. B-6번\t6. B-7번\t6. B-8번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>8)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }           
+                                                system("clear");
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="B-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="B-2번 좌석";
+                                                }
+                                                else if(pay.seat_number=3)
+                                                {
+                                                    pay.seat="B-3번 좌석";
+                                                }
+                                                else if(pay.seat_number=4)
+                                                {
+                                                    pay.seat="B-4번 좌석";
+                                                }
+                                                else if(pay.seat_number=5)
+                                                {
+                                                    pay.seat="B-5번 좌석";
+                                                }
+                                                else if(pay.seat_number=6)
+                                                {
+                                                    pay.seat="B-6번 좌석";
+                                                }
+                                                else if(pay.seat_number=7)
+                                                {
+                                                    pay.seat="B-7번 좌석";
+                                                }
+                                                else if(pay.seat_number=8)
+                                                {
+                                                    pay.seat="B-8번 좌석";
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"SILVER석의 금액은 "<<SILVER<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                    }
+                                }
+                                else if (pay.yes=='n'||pay.yes=='N')
+                                {
+                                    break;
+                                }
+                                break;
+                            }
+                            break;
+                        case 3:
+                            {
+                                system("clear");
+                                cout<<"'요르단 VS 대한민국'"<<endl;
+                                cout<<"'2024.01.20 토요일 오후 20:30'"<<endl;
+                                cout<<"선택한 경기가 맞습니까?"<<endl;
+                                cout<<" Y / N "<<endl;
+                                cin>>pay.yes;
+                                if(pay.yes=='y'||pay.yes=='Y')
+                                {
+                                    system("clear");
+                                    cout<<"예매를 선택하셨습니다."<<endl;
+                                    pay.metch="요르단 VS 대한민국 2024.01.20 토요일 오후 20:30";
+                                    cout<<"원하는 구역을 선택해 주세요."<<endl;
+                                    cout<<"MVIP\t VIP\t GOLD\t SILVER"<<endl;
+                                    cin>>pay.area_number;
+                                    switch (pay.area_number)
+                                    {
+                                    case 1:
+                                        {
+                                            system("clear");
+                                            cout<<"MVIP석을 선택하셨습니다."<<endl;
+                                            pay.area= "MVIP";
+                                            cout<<"MVIP 석은 최대 4인까지 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"MVIP석은 현재 2개의 좌석이 남아있습니다."<<endl;
+                                                cout<<"\n";
+                                                cout<<"1. M-1번\t2. M-2번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>2)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="M-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="M-2번 좌석";
+                                                }
+                                                system("clear");
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"MVIP석의 금액은 "<<MVIP<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 2:
+                                        {
+                                            system("clear");
+                                            cout<<"VIP 석을 선택하셨습니다."<<endl;
+                                            pay.area= "VIP";
+                                            cout<<"VIP 석은 최대 2인까지 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"VIP석은 현재 4개의 좌석이 남아있습니다."<<endl;
+                                                cout<<'\n';
+                                                cout<<"1. S-1번\t2. S-2번"<<endl;
+                                                cout<<"3. S-3번\t4. S-4번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>4)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="S-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="S-2번 좌석";
+                                                }
+                                                else if(pay.seat_number=3)
+                                                {
+                                                    pay.seat="S-3번 좌석";
+                                                }
+                                                else if(pay.seat_number=4)
+                                                {
+                                                    pay.seat="S-4번 좌석";
+                                                }
+                                                system("clear");      
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"VIP석의 금액은 "<<VIP<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 3:
+                                        {
+                                            system("clear");
+                                            cout<<"GOLD석을 선택하셨습니다."<<endl;
+                                            pay.area= "GOLD";
+                                            cout<<"GOLD석은 최대 1인 만 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"GOLD석은 현재 6개의 좌석이 남아있습니다."<<endl;
+                                                cout<<'\n';
+                                                cout<<"1. A-1번\t2. A-2번\t3. A-3번"<<endl;
+                                                cout<<"4. A-4번\t5. A-5번\t6. A-6번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>6)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="A-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="A-2번 좌석";
+                                                }
+                                                else if(pay.seat_number=3)
+                                                {
+                                                    pay.seat="A-3번 좌석";
+                                                }
+                                                else if(pay.seat_number=4)
+                                                {
+                                                    pay.seat="A-4번 좌석";
+                                                }
+                                                else if(pay.seat_number=5)
+                                                {
+                                                    pay.seat="A-5번 좌석";
+                                                }
+                                                else if(pay.seat_number=6)
+                                                {
+                                                    pay.seat="A-6번 좌석";
+                                                }
+                                                system("clear");        
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"GOLD석의 금액은 "<<GOLD<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 4:
+                                        {
+                                            system("clear");
+                                            cout<<"SILVER 석을 선택하셨습니다."<<endl;
+                                            pay.area= "SILVER";
+                                            cout<<"SILVER 석은 최대 1인 만 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"SILVER석은 현재 8개의 좌석이 남아있습니다."<<endl;
+                                                cout<<'\n';
+                                                cout<<"1. B-1번\t2. B-2번\t3. B-3번\t4. B-4번"<<endl;
+                                                cout<<"5. B-5번\t6. B-6번\t6. B-7번\t6. B-8번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>8)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }           
+                                                system("clear");
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="B-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="B-2번 좌석";
+                                                }
+                                                else if(pay.seat_number=3)
+                                                {
+                                                    pay.seat="B-3번 좌석";
+                                                }
+                                                else if(pay.seat_number=4)
+                                                {
+                                                    pay.seat="B-4번 좌석";
+                                                }
+                                                else if(pay.seat_number=5)
+                                                {
+                                                    pay.seat="B-5번 좌석";
+                                                }
+                                                else if(pay.seat_number=6)
+                                                {
+                                                    pay.seat="B-6번 좌석";
+                                                }
+                                                else if(pay.seat_number=7)
+                                                {
+                                                    pay.seat="B-7번 좌석";
+                                                }
+                                                else if(pay.seat_number=8)
+                                                {
+                                                    pay.seat="B-8번 좌석";
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"SILVER석의 금액은 "<<SILVER<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                    }
+                                }
+                                else if (pay.yes=='n'||pay.yes=='N')
+                                {
+                                    break;
+                                }
+                                break;
+                            }
+                            break;
+                        case 4:
+                            {
+                                system("clear");
+                                cout<<"'바레인 VS 말레이시아'"<<endl;
+                                cout<<"'2024.01.20 토요일 오후 23:30'"<<endl;
+                                cout<<"선택한 경기가 맞습니까?"<<endl;
+                                cout<<" Y / N "<<endl;
+                                cin>>pay.yes;
+                                if(pay.yes=='y'||pay.yes=='Y')
+                                {
+                                    system("clear");
+                                    cout<<"예매를 선택하셨습니다."<<endl;
+                                    pay.metch="바레인 VS 말레이시아 2024.01.20 토요일 오후 23:30";
+                                    cout<<"원하는 구역을 선택해 주세요."<<endl;
+                                    cout<<"MVIP\t VIP\t GOLD\t SILVER"<<endl;
+                                    cin>>pay.area_number;
+                                    switch (pay.area_number)
+                                    {
+                                    case 1:
+                                        {
+                                            system("clear");
+                                            cout<<"MVIP석을 선택하셨습니다."<<endl;
+                                            pay.area= "MVIP";
+                                            cout<<"MVIP 석은 최대 4인까지 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"MVIP석은 현재 2개의 좌석이 남아있습니다."<<endl;
+                                                cout<<"\n";
+                                                cout<<"1. M-1번\t2. M-2번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>2)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="M-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="M-2번 좌석";
+                                                }
+                                                system("clear");
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"MVIP석의 금액은 "<<MVIP<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 2:
+                                        {
+                                            system("clear");
+                                            cout<<"VIP 석을 선택하셨습니다."<<endl;
+                                            pay.area= "VIP";
+                                            cout<<"VIP 석은 최대 2인까지 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"VIP석은 현재 4개의 좌석이 남아있습니다."<<endl;
+                                                cout<<'\n';
+                                                cout<<"1. S-1번\t2. S-2번"<<endl;
+                                                cout<<"3. S-3번\t4. S-4번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>4)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="S-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="S-2번 좌석";
+                                                }
+                                                else if(pay.seat_number=3)
+                                                {
+                                                    pay.seat="S-3번 좌석";
+                                                }
+                                                else if(pay.seat_number=4)
+                                                {
+                                                    pay.seat="S-4번 좌석";
+                                                }
+                                                system("clear");      
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"VIP석의 금액은 "<<VIP<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 3:
+                                        {
+                                            system("clear");
+                                            cout<<"GOLD석을 선택하셨습니다."<<endl;
+                                            pay.area= "GOLD";
+                                            cout<<"GOLD석은 최대 1인 만 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"GOLD석은 현재 6개의 좌석이 남아있습니다."<<endl;
+                                                cout<<'\n';
+                                                cout<<"1. A-1번\t2. A-2번\t3. A-3번"<<endl;
+                                                cout<<"4. A-4번\t5. A-5번\t6. A-6번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>6)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="A-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="A-2번 좌석";
+                                                }
+                                                else if(pay.seat_number=3)
+                                                {
+                                                    pay.seat="A-3번 좌석";
+                                                }
+                                                else if(pay.seat_number=4)
+                                                {
+                                                    pay.seat="A-4번 좌석";
+                                                }
+                                                else if(pay.seat_number=5)
+                                                {
+                                                    pay.seat="A-5번 좌석";
+                                                }
+                                                else if(pay.seat_number=6)
+                                                {
+                                                    pay.seat="A-6번 좌석";
+                                                }
+                                                system("clear");        
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"GOLD석의 금액은 "<<GOLD<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 4:
+                                        {
+                                            system("clear");
+                                            cout<<"SILVER 석을 선택하셨습니다."<<endl;
+                                            pay.area= "SILVER";
+                                            cout<<"SILVER 석은 최대 1인 만 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"SILVER석은 현재 8개의 좌석이 남아있습니다."<<endl;
+                                                cout<<'\n';
+                                                cout<<"1. B-1번\t2. B-2번\t3. B-3번\t4. B-4번"<<endl;
+                                                cout<<"5. B-5번\t6. B-6번\t6. B-7번\t6. B-8번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>8)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }           
+                                                system("clear");
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="B-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="B-2번 좌석";
+                                                }
+                                                else if(pay.seat_number=3)
+                                                {
+                                                    pay.seat="B-3번 좌석";
+                                                }
+                                                else if(pay.seat_number=4)
+                                                {
+                                                    pay.seat="B-4번 좌석";
+                                                }
+                                                else if(pay.seat_number=5)
+                                                {
+                                                    pay.seat="B-5번 좌석";
+                                                }
+                                                else if(pay.seat_number=6)
+                                                {
+                                                    pay.seat="B-6번 좌석";
+                                                }
+                                                else if(pay.seat_number=7)
+                                                {
+                                                    pay.seat="B-7번 좌석";
+                                                }
+                                                else if(pay.seat_number=8)
+                                                {
+                                                    pay.seat="B-8번 좌석";
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"SILVER석의 금액은 "<<SILVER<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                    }
+                                }
+                                else if (pay.yes=='n'||pay.yes=='N')
+                                {
+                                    break;
+                                }
+                                break;
+                            }
+                            break;
+                        case 5:
+                            {
+                                system("clear");
+                                cout<<"'대한민국 VS 말레이시아'"<<endl;
+                                cout<<"'2024.01.25 목요일 오후 20:30'"<<endl;
+                                cout<<"선택한 경기가 맞습니까?"<<endl;
+                                cout<<" Y / N "<<endl;
+                                cin>>pay.yes;
+                                if(pay.yes=='y'||pay.yes=='Y')
+                                {
+                                    system("clear");
+                                    cout<<"예매를 선택하셨습니다."<<endl;
+                                    pay.metch="대한민국 VS 말레이시아 2024.01.25 목요일 오후 20:30";
+                                    cout<<"원하는 구역을 선택해 주세요."<<endl;
+                                    cout<<"MVIP\t VIP\t GOLD\t SILVER"<<endl;
+                                    cin>>pay.area_number;
+                                    switch (pay.area_number)
+                                    {
+                                    case 1:
+                                        {
+                                            system("clear");
+                                            cout<<"MVIP석을 선택하셨습니다."<<endl;
+                                            pay.area= "MVIP";
+                                            cout<<"MVIP 석은 최대 4인까지 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"MVIP석은 현재 2개의 좌석이 남아있습니다."<<endl;
+                                                cout<<"\n";
+                                                cout<<"1. M-1번\t2. M-2번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>2)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="M-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="M-2번 좌석";
+                                                }
+                                                system("clear");
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"MVIP석의 금액은 "<<MVIP<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 2:
+                                        {
+                                            system("clear");
+                                            cout<<"VIP 석을 선택하셨습니다."<<endl;
+                                            pay.area= "VIP";
+                                            cout<<"VIP 석은 최대 2인까지 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"VIP석은 현재 4개의 좌석이 남아있습니다."<<endl;
+                                                cout<<'\n';
+                                                cout<<"1. S-1번\t2. S-2번"<<endl;
+                                                cout<<"3. S-3번\t4. S-4번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>4)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="S-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="S-2번 좌석";
+                                                }
+                                                else if(pay.seat_number=3)
+                                                {
+                                                    pay.seat="S-3번 좌석";
+                                                }
+                                                else if(pay.seat_number=4)
+                                                {
+                                                    pay.seat="S-4번 좌석";
+                                                }
+                                                system("clear");      
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"VIP석의 금액은 "<<VIP<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 3:
+                                        {
+                                            system("clear");
+                                            cout<<"GOLD석을 선택하셨습니다."<<endl;
+                                            pay.area= "GOLD";
+                                            cout<<"GOLD석은 최대 1인 만 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"GOLD석은 현재 6개의 좌석이 남아있습니다."<<endl;
+                                                cout<<'\n';
+                                                cout<<"1. A-1번\t2. A-2번\t3. A-3번"<<endl;
+                                                cout<<"4. A-4번\t5. A-5번\t6. A-6번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>6)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="A-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="A-2번 좌석";
+                                                }
+                                                else if(pay.seat_number=3)
+                                                {
+                                                    pay.seat="A-3번 좌석";
+                                                }
+                                                else if(pay.seat_number=4)
+                                                {
+                                                    pay.seat="A-4번 좌석";
+                                                }
+                                                else if(pay.seat_number=5)
+                                                {
+                                                    pay.seat="A-5번 좌석";
+                                                }
+                                                else if(pay.seat_number=6)
+                                                {
+                                                    pay.seat="A-6번 좌석";
+                                                }
+                                                system("clear");        
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"GOLD석의 금액은 "<<GOLD<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 4:
+                                        {
+                                            system("clear");
+                                            cout<<"SILVER 석을 선택하셨습니다."<<endl;
+                                            pay.area= "SILVER";
+                                            cout<<"SILVER 석은 최대 1인 만 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"SILVER석은 현재 8개의 좌석이 남아있습니다."<<endl;
+                                                cout<<'\n';
+                                                cout<<"1. B-1번\t2. B-2번\t3. B-3번\t4. B-4번"<<endl;
+                                                cout<<"5. B-5번\t6. B-6번\t6. B-7번\t6. B-8번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>8)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }           
+                                                system("clear");
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="B-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="B-2번 좌석";
+                                                }
+                                                else if(pay.seat_number=3)
+                                                {
+                                                    pay.seat="B-3번 좌석";
+                                                }
+                                                else if(pay.seat_number=4)
+                                                {
+                                                    pay.seat="B-4번 좌석";
+                                                }
+                                                else if(pay.seat_number=5)
+                                                {
+                                                    pay.seat="B-5번 좌석";
+                                                }
+                                                else if(pay.seat_number=6)
+                                                {
+                                                    pay.seat="B-6번 좌석";
+                                                }
+                                                else if(pay.seat_number=7)
+                                                {
+                                                    pay.seat="B-7번 좌석";
+                                                }
+                                                else if(pay.seat_number=8)
+                                                {
+                                                    pay.seat="B-8번 좌석";
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"SILVER석의 금액은 "<<SILVER<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                    }
+                                }
+                                else if (pay.yes=='n'||pay.yes=='N')
+                                {
+                                    break;
+                                }
+                                break;
+                            }
+                            break;
+                        case 6:
+                            {
+                                system("clear");
+                                cout<<"'요르단 VS 바레인'"<<endl;
+                                cout<<"'2024.01.25 목요일 오후 20:30'"<<endl;
+                                cout<<"선택한 경기가 맞습니까?"<<endl;
+                                cout<<" Y / N "<<endl;
+                                cin>>pay.yes;
+                                if(pay.yes=='y'||pay.yes=='Y')
+                                {
+                                    system("clear");
+                                    cout<<"예매를 선택하셨습니다."<<endl;
+                                    pay.metch="요르단 VS 바레인 2024.01.25 목요일 오후 20:30";
+                                    cout<<"원하는 구역을 선택해 주세요."<<endl;
+                                    cout<<"MVIP\t VIP\t GOLD\t SILVER"<<endl;
+                                    cin>>pay.area_number;
+                                    switch (pay.area_number)
+                                    {
+                                    case 1:
+                                        {
+                                            system("clear");
+                                            cout<<"MVIP석을 선택하셨습니다."<<endl;
+                                            pay.area= "MVIP";
+                                            cout<<"MVIP 석은 최대 4인까지 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"MVIP석은 현재 2개의 좌석이 남아있습니다."<<endl;
+                                                cout<<"\n";
+                                                cout<<"1. M-1번\t2. M-2번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>2)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="M-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="M-2번 좌석";
+                                                }
+                                                system("clear");
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"MVIP석의 금액은 "<<MVIP<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 2:
+                                        {
+                                            system("clear");
+                                            cout<<"VIP 석을 선택하셨습니다."<<endl;
+                                            pay.area= "VIP";
+                                            cout<<"VIP 석은 최대 2인까지 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"VIP석은 현재 4개의 좌석이 남아있습니다."<<endl;
+                                                cout<<'\n';
+                                                cout<<"1. S-1번\t2. S-2번"<<endl;
+                                                cout<<"3. S-3번\t4. S-4번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>4)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="S-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="S-2번 좌석";
+                                                }
+                                                else if(pay.seat_number=3)
+                                                {
+                                                    pay.seat="S-3번 좌석";
+                                                }
+                                                else if(pay.seat_number=4)
+                                                {
+                                                    pay.seat="S-4번 좌석";
+                                                }
+                                                system("clear");      
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"VIP석의 금액은 "<<VIP<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 3:
+                                        {
+                                            system("clear");
+                                            cout<<"GOLD석을 선택하셨습니다."<<endl;
+                                            pay.area= "GOLD";
+                                            cout<<"GOLD석은 최대 1인 만 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"GOLD석은 현재 6개의 좌석이 남아있습니다."<<endl;
+                                                cout<<'\n';
+                                                cout<<"1. A-1번\t2. A-2번\t3. A-3번"<<endl;
+                                                cout<<"4. A-4번\t5. A-5번\t6. A-6번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>6)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="A-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="A-2번 좌석";
+                                                }
+                                                else if(pay.seat_number=3)
+                                                {
+                                                    pay.seat="A-3번 좌석";
+                                                }
+                                                else if(pay.seat_number=4)
+                                                {
+                                                    pay.seat="A-4번 좌석";
+                                                }
+                                                else if(pay.seat_number=5)
+                                                {
+                                                    pay.seat="A-5번 좌석";
+                                                }
+                                                else if(pay.seat_number=6)
+                                                {
+                                                    pay.seat="A-6번 좌석";
+                                                }
+                                                system("clear");        
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"GOLD석의 금액은 "<<GOLD<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 4:
+                                        {
+                                            system("clear");
+                                            cout<<"SILVER 석을 선택하셨습니다."<<endl;
+                                            pay.area= "SILVER";
+                                            cout<<"SILVER 석은 최대 1인 만 입장 가능합니다."<<endl;
+                                            while(1)
+                                            {
+                                                a=0;
+                                                cout<<"원하는 좌석을 선택해 주세요."<<endl;
+                                                cout<<"SILVER석은 현재 8개의 좌석이 남아있습니다."<<endl;
+                                                cout<<'\n';
+                                                cout<<"1. B-1번\t2. B-2번\t3. B-3번\t4. B-4번"<<endl;
+                                                cout<<"5. B-5번\t6. B-6번\t6. B-7번\t6. B-8번"<<endl;
+                                                cin>>pay.seat_number;
+                                                if(pay.seat_number<0||pay.seat_number>8)
+                                                {
+                                                    system("clear");
+                                                    cout<<"잘못된 좌석을 선택하셨습니다. 다시 선택해주세요"<<endl;
+                                                    a=1;
+                                                    continue;
+                                                }           
+                                                system("clear");
+                                                cout<<"선택하신 좌석은 "<<pay.area<<"석에 "<<pay.seat<<"입니다."<<endl;
+                                                ofstream file;
+                                                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv",ios::app);
+                                                if(!file.is_open())
+                                                {
+                                                    cout<<"파일 안열려서 저장안됨"<<endl;
+                                                    return 0;
+                                                }
+                                                else if(pay.seat_number=1)
+                                                {
+                                                    pay.seat="B-1번 좌석";
+                                                }
+                                                else if(pay.seat_number=2)
+                                                {
+                                                    pay.seat="B-2번 좌석";
+                                                }
+                                                else if(pay.seat_number=3)
+                                                {
+                                                    pay.seat="B-3번 좌석";
+                                                }
+                                                else if(pay.seat_number=4)
+                                                {
+                                                    pay.seat="B-4번 좌석";
+                                                }
+                                                else if(pay.seat_number=5)
+                                                {
+                                                    pay.seat="B-5번 좌석";
+                                                }
+                                                else if(pay.seat_number=6)
+                                                {
+                                                    pay.seat="B-6번 좌석";
+                                                }
+                                                else if(pay.seat_number=7)
+                                                {
+                                                    pay.seat="B-7번 좌석";
+                                                }
+                                                else if(pay.seat_number=8)
+                                                {
+                                                    pay.seat="B-8번 좌석";
+                                                }
+                                                file<<log_id<<","<<pay.metch<<","<<pay.area<<"구역"<<","<<pay.seat<<endl;
+                                                file.close();
+                                                cout<<"SILVER석의 금액은 "<<SILVER<<" 원 입니다."<<endl;
+                                                cout<<"금액을 넣어주세요."<<endl;
+                                                sleep(3);
+                                                cout<<"거래 감사합니다."<<endl;
+                                                if(a==0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                    }
+                                }
+                                else if (pay.yes=='n'||pay.yes=='N')
+                                {
+                                    break;
+                                }
+                                break;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+            }
+            break;
+        case 5://예매정보확인 파트
+            {
+                system("clear");
+                cout<<"예매정보 확인을 선택하셨습니다."<<endl;
+                check chack;
+                int b=1;
+                ifstream file;
+                // getline(cin, log_id);
+                file.open("/home/aiot6/CProjects/edu/24/01/project/ticket.csv");
+                if(!file.is_open())
+                {
+                    cout<<"코딩을 잘 하고 싶어요"<<endl;
                     return 0;
                 }
-
-                while(1)                     //중복 검사를 위한 반복
+                while(!file.eof())
                 {
-                    getline(file, log.s_id, ',');//ID만 가져오기
-                    getline(file, log.s_pw, ',');
-                    getline(file, log.s_email, ',');
-                    getline(file, log.s_phone, ',');
-                    getline(file, log.s_uid, ',');
-                    file.get();
-                    // file>>log.temp;
-                    if(file.eof())
-                        break;
-                    // cout<<log.s_id<<endl;
-                    if(log.ID.compare(log.s_id)==0)
+                    getline(file,chack.id,',');
+                    getline(file,chack.ticket);
+                    if(log_id.compare(chack.id)==0)
                     {
-                        cout<<"비밀번호 : ";
-                        getline(cin, log.PW);
-                        if(log.PW.compare(log.s_pw)==0)
-                        {
-                            cout<<"로그인 되었습니다."<<endl;
-                            login=1;
-                            break;
-                        }
+                        cout<<log_id<<"님께서 예매하신 경기는"<<chack.ticket<<"입니다"<<endl;
+                        b=0;
                     }
                 }
                 file.close();
-                break;
+                if(b==0)
+                {
+                    cout<<"메인화면으로 되돌아 가고 싶으시면 어떤키든 입력해주세요"<<endl;
+                    cin>>Choice_page;
+                    break;
+                }
+                if(log_id.compare(chack.id)!=0)
+                {
+                    cout<<"예매하신 경기가 없습니다."<<endl;
+                    b=1;
+                    cout<<"3초 뒤 메인화면으로 되돌아 갑니다."<<endl;
+                    sleep(3);
+                    break;
+                }
             }
+        case 6://로그아웃 파트
+            {
+                login =0;
+                log_id = "";
+            }
+            break;
         case 7://회원가입 파트
             {
                 Member n_log;
@@ -539,18 +2301,81 @@ int main(void)
                 cout<<"E-mail : "<<n_log.E_mail<<endl;
                 cout<<"Phone number : "<<n_log.Phone<<endl;
                 // cout<<n_log.s_uid<<endl;
-                // sleep(100);
                 n_log.UID=stoi(n_log.s_uid);                  //stoi 스트링에서 int로 형변환
                 cout<<"회원번호 : "<<n_log.UID+1<<endl;
                 cout<<"초기 화면으로 되돌아갑니다. 로그인을 하시면 됩니다."<<endl;
                 sleep(2);
                 ofstream outFile;
                 outFile.open("/home/aiot6/CProjects/edu/24/01/project/account.csv",ios::app);
+                if(!outFile.is_open())
+                {
+                    cout<<"안열렸어";
+                    return 0;
+                }
                 outFile<<n_log.ID<<","<<n_log.PW<<","<<n_log.E_mail<<","<<n_log.Phone<<","<<n_log.UID+1<<","<<endl;
                 outFile.close();
             }
             break;
-
+        case 8://로그인 파트
+            {
+                int a;
+                Member log;
+                cout<<"로그인을 선택하셨습니다."<<endl;
+                while(1)
+                {
+                    a=0;
+                    cout<<"사용자 ID: ";
+                    getline(cin, log.ID);
+                    ifstream file;               //파일 오픈을 위한 변수 선언
+                    file.open("/home/aiot6/CProjects/edu/24/01/project/account.csv");    //파일 오픈
+                    if(!file.is_open())          //파일이 없으면
+                    {
+                        cout<<"파일이 없음 ㅜㅡ";
+                        return 0;
+                    }
+                    while(1)                     //중복 검사를 위한 반복
+                    {
+                        getline(file, log.s_id, ',');//ID만 가져오기
+                        getline(file, log.s_pw, ',');
+                        getline(file, log.s_email, ',');
+                        getline(file, log.s_phone, ',');
+                        getline(file, log.s_uid, ',');
+                        file.get();
+                        // file>>log.temp;
+                        if(file.eof())
+                            break;
+                        // cout<<log.s_id<<endl;
+                        if(log.ID.compare(log.s_id)==0)
+                        {
+                            cout<<"비밀번호 : ";
+                            getline(cin, log.PW);
+                            if(log.PW.compare(log.s_pw)==0)
+                            {
+                                cout<<"로그인 되었습니다."<<endl;
+                                login=1;
+                                a=0;
+                                log_id=log.ID;                            
+                                break;
+                            }
+                        }
+                    }
+                    file.close();
+                    if(log.ID.compare(log.s_id)!=0)
+                    {
+                        cout<<"일치하는 ID가 없습니다."<<endl;
+                        a=1;
+                    }
+                    if(a==0)
+                    {
+                       break;
+                    }
+                }
+            }
+            break;
+        case 9://ID,PW 찾기 파트
+            {
+                
+            }
         case 0://종료 파트
             return 0;
             
