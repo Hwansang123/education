@@ -42,13 +42,9 @@ int main(void)
         // sleep(1);
         // system("clear");
         cout<<'\t'<<"┌──────────────────────────────┐"<<endl;
-        // cout<<"│                              │"<<endl;
-        // cout<<"│                              │"<<endl;
         cout<<'\t'<<"│           1. 로그인          │"<<endl;
         cout<<'\t'<<"│           2. 회원가입        │"<<endl;
         cout<<'\t'<<"│           3. 종료            │"<<endl;
-        // cout<<"│                              │"<<endl;
-        // cout<<"│                              │"<<endl;
         cout<<'\t'<<"└──────────────────────────────┘"<<endl;
         cout<<"원하는 메뉴를 선택해주세요."<<endl;
         cout<<"메뉴 : ";
@@ -235,7 +231,7 @@ int main(void)
                     sqlite3_close(db);
                     return 1;
                 }
-                cout<<"검색하기 원하는 키워드를 입력하세요."<<endl;
+                cout<<"원하는 키워드를 입력하세요."<<endl;
                 cout<<"  ";
                 string keyword;
                 getline(cin, keyword);
